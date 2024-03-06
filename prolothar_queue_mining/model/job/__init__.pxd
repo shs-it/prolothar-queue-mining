@@ -1,0 +1,1 @@
+from prolothar_queue_mining.model.job.job cimport Job

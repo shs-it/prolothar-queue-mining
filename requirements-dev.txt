@@ -1,0 +1,10 @@
+coverage
+mypy
+Cython
+twine
+hypothesis
+pylint
+perflint
+scipy
+build
+wheel

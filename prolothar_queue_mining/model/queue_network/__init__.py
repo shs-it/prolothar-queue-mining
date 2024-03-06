@@ -1,0 +1,1 @@
+from prolothar_queue_mining.model.queue_network.queue_network import QueueNetwork

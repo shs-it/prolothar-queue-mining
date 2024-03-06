@@ -1,0 +1,24 @@
+import unittest
+
+from prolothar_queue_mining.model.arrival_process import FixedArrival
+from prolothar_queue_mining.model.arrival_process import BatchArrivalAdapter
+from prolothar_queue_mining.model.arrival_process import RecordingArrival
+from prolothar_queue_mining.model.job import Job
+from prolothar_queue_mining.model.population import ListPopulation
+from prolothar_queue_mining.model.distribution import DiscreteDegenerateDistribution
+
+class TestBatchArrivalAdapter(unittest.TestCase):
+
+    def test_get_next_job(self):
+        arrival = RecordingArrival(BatchArrivalAdapter(FixedArrival(
+            ListPopulation([Job('A'), Job('B'), Job('C')]),
+            [10, 25, 42]
+        ), DiscreteDegenerateDistribution(2)))
+        arrival.get_next_job()
+        arrival.get_next_job()
+        self.assertEqual([25, 25], arrival.get_recorded_arrival_times())
+        self.assertEqual([Job('A'), Job('B')], arrival.get_recorded_jobs())
+        self.assertAlmostEqual(1/16, arrival.get_mean_arrival_rate(), delta=0.0001)
+
+if __name__ == '__main__':
+    unittest.main()

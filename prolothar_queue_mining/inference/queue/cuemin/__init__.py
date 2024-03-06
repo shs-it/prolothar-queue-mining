@@ -1,0 +1,1 @@
+from prolothar_queue_mining.inference.queue.cuemin.cuemin import CueMin

@@ -1,0 +1,4 @@
+from prolothar_queue_mining.sklearn_barebones.linear_model.linear_regression import BarebonesLinearRegression
+from prolothar_queue_mining.sklearn_barebones.linear_model.gamma_regressor import BarebonesGammaRegressor
+from prolothar_queue_mining.sklearn_barebones.linear_model.ridge import BarebonesRidge
+from prolothar_queue_mining.sklearn_barebones.linear_model.lasso import BarebonesLasso

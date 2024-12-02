@@ -4,6 +4,7 @@ dist
 *.exe
 *.o
 *.egg-info
+*.so
 
 ### PYTHON ###
 __pycache__/
@@ -13,6 +14,7 @@ __pycache__/
 *.stackdump
 *-checkpoint.ipynb
 venv
+.pyirc
 
 ### Spyder ###
 .spyproject/

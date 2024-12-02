@@ -63,7 +63,13 @@ class CueMin(QueueMiner):
             can be FCFS,LCFS,LR,PQ-c,FLIFO,SIRO
             by default FCFS,LCFS,PQ-c,FLIFO
         """
-        if search_strategy_name == 'linear':
+        if search_strategy_name.startswith('linear'):
+            if '-' not in search_strategy_name:
+                min_nr_of_servers, max_nr_of_servers = None, None
+            else:
+                min_nr_of_servers, max_nr_of_servers = search_strategy_name.replace('linear-', '').split('-')
+                min_nr_of_servers = int(min_nr_of_servers)
+                max_nr_of_servers = int(max_nr_of_servers)
             self.__search_strategy = LinearSearch(
                 recording_enabled=recording_enabled,
                 record_candidates=record_candidates,
@@ -73,7 +79,10 @@ class CueMin(QueueMiner):
                 numerical_attribute_names=numerical_attribute_names,
                 nr_of_cpus_for_sklearn=nr_of_cpus_for_sklearn,
                 seed_for_distributions=seed_for_distributions,
-                verbose=verbose)
+                min_nr_of_servers=min_nr_of_servers,
+                max_nr_of_servers=max_nr_of_servers,
+                verbose=verbose
+            )
         elif search_strategy_name.endswith('-section'):
             self.__search_strategy = NSectionSearch(
                 int(search_strategy_name.replace('-section', '')),

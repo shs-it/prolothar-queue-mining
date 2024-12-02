@@ -56,6 +56,9 @@ cuemin = CueMin(verbose=True, categorical_attribute_names = ['color'], numerical
 #find and a print a waiting queue model
 queue = cuemin.infer_queue(observed_arrivals, observed_departues)
 print(queue)
+
+#if you want to use domain knowledge to restrict the number of server, e.g. min 2 and max 4:
+queue = cuemin.infer_queue(observed_arrivals, observed_departues, search_strategy_name='linear-2-4')
 ```
 
 ## Development
@@ -79,16 +82,44 @@ make test
 
 ### Deployment
 
-```bash
-make clean_package || make package && make publish
+Optional requirement: Create a .pypirc file in the project root directory with your pypi authentication token:
+```
+[pypi]
+username = __token__
+password = pypi-AgEIcH...
 ```
 
-You should also create a tag for the current version
+1. Change the version in version.txt
+2. Build the package
 
 ```bash
-git tag -a [version] -m "describe what has changed"
-git push --tags
+make clean_package
+make package
 ```
+
+3. Deploy the version to Pypi:
+```bash
+ make publish
+ ```
+or 
+```bash
+twine upload --skip-existing --verbose --config .pypirc dist/*
+```
+
+4. Create and push a tag for this version by
+
+```bash
+git tag -a $(cat version.txt) -m "describe this version"
+git push --all && git push --tags
+```
+
+### Devcontainer
+
+There is a decontainer definition in this project, which helps you to set up your environment.
+At Stahl-Holding-Saar, we are behind a corporate proxy and cannot install dependencies from PyPi directly.
+I yet have not found a stable solution to set the PIP_INDEX_URL and PIP_TRUSTED_HOST variables dynamically. 
+In the current Dockerfile, I hardcoded the values, so you have to adapt them. 
+If you know a solution to this problem, please contact me. 
 
 ## Versioning
 

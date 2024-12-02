@@ -52,6 +52,30 @@ class TestLinear(unittest.TestCase):
         self.assertGreater(len(df), 0)
         self.assertEqual(len(df), len(queue_inference.get_recorded_candidates()))
 
+    def test_infer_queue_toy_example_linear_with_min_max_server(self):
+        queue_inference = CueMin(record_candidates=True, search_strategy_name='linear-2-3')
+        observed_arrivals = [
+            (Job('A'), 3),
+            (Job('B'), 4),
+            (Job('C'), 5),
+            (Job('D'), 6),
+            (Job('E'), 7),
+            (Job('F'), 8),
+        ]
+        observed_departues = [
+            (Job('A'), 4),
+            (Job('B'), 7),
+            (Job('C'), 11),
+            (Job('D'), 12),
+            (Job('E'), 13),
+            (Job('F'), 14),
+        ]
+        inferred_queue = queue_inference.infer_queue(observed_arrivals, observed_departues)
+        self.assertIsInstance(inferred_queue, Queue)
+
+        df = queue_inference.get_recording_dataframe()
+        self.assertTrue(all((df['c'] >= 2) & (df['c'] <= 3)))
+
     def test_infer_synthetic_fifo_queue_with_one_server(self):
         queue_inference = CueMin(search_strategy_name='linear', patience=3)
 

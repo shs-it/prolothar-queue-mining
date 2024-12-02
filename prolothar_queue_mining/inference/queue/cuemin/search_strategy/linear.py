@@ -22,7 +22,9 @@ class LinearSearch(SearchStrategy):
         nr_of_cpus_for_sklearn: int = 1,
         nr_of_load_clusters_candidates: list[int] = None,
         categorical_attribute_names: list[str] = None,
-        numerical_attribute_names: list[str] = None):
+        numerical_attribute_names: list[str] = None,
+        min_nr_of_servers: int|None = None,
+        max_nr_of_servers: int|None = None):
         super().__init__(
             record_candidates=record_candidates,
             recording_enabled=recording_enabled,
@@ -33,6 +35,8 @@ class LinearSearch(SearchStrategy):
             categorical_attribute_names=categorical_attribute_names,
             numerical_attribute_names=numerical_attribute_names)
         self.__patience = patience
+        self.__min_nr_of_servers = min_nr_of_servers
+        self.__max_nr_of_servers = max_nr_of_servers
 
     def search(
             self, waiting_area: WaitingArea,
@@ -44,9 +48,15 @@ class LinearSearch(SearchStrategy):
         iterations_without_improvement = 0
         best_mdl_score = float('inf')
         best_queue = None
-        min_c = LowerBoundEstimator(waiting_area).estimate_nr_of_servers(observed_arrivals, observed_departures)
-        max_c = UpperBoundEstimator(waiting_area).estimate_nr_of_servers(observed_arrivals, observed_departures)
-        for nr_of_servers in trange(1, max_c + 1, disable=not self.verbose, desc='c', leave=False):
+        if self.__min_nr_of_servers is None:
+            min_c = LowerBoundEstimator(waiting_area).estimate_nr_of_servers(observed_arrivals, observed_departures)
+        else:
+            min_c = self.__min_nr_of_servers
+        if self.__max_nr_of_servers is None:
+            max_c = UpperBoundEstimator(waiting_area).estimate_nr_of_servers(observed_arrivals, observed_departures)
+        else:
+            max_c = self.__max_nr_of_servers
+        for nr_of_servers in trange(min_c, max_c + 1, disable=not self.verbose, desc='c', leave=False):
             best_queue_for_c, best_mdl_score_for_c = self._find_best_queue_for_c(
                 observed_arrivals, observed_departures, departure_time_per_job,
                 nr_of_jobs_in_system_over_time, arrival_process,

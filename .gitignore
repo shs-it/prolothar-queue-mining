@@ -14,7 +14,7 @@ __pycache__/
 *.stackdump
 *-checkpoint.ipynb
 venv
-.pyirc
+.pypirc
 
 ### Spyder ###
 .spyproject/

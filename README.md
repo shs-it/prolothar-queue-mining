@@ -57,8 +57,9 @@ cuemin = CueMin(verbose=True, categorical_attribute_names = ['color'], numerical
 queue = cuemin.infer_queue(observed_arrivals, observed_departues)
 print(queue)
 
-#if you want to use domain knowledge to restrict the number of server, e.g. min 2 and max 4:
-queue = cuemin.infer_queue(observed_arrivals, observed_departues, search_strategy_name='linear-2-4')
+#if you want to use domain knowledge to restrict the number of servers, e.g. min 2 and max 4:
+cuemin = CueMin(search_strategy_name='linear-2-4')
+queue = cuemin.infer_queue(observed_arrivals, observed_departues)
 ```
 
 ## Development

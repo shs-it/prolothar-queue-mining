@@ -46,7 +46,7 @@ observed_departues = [
 ]
 
 #you can add additional features to a job, example:
-Job('4711', {'color': 'blue', size: 12})
+Job('4711', {'color': 'blue', 'size': 12})
 
 cuemin = CueMin(verbose=True)
 

@@ -33,6 +33,46 @@ class TestQueueDepartureTimePredictor(unittest.TestCase):
         ])
         self.assertDictEqual(expected_departure_times, predicted_departure_times)
 
+    def test_predict_mode(self):
+        expected_departure_times = {
+            Job('A'): 47,
+            Job('B'): 47,
+            Job('C'): 72,
+            Job('D'): 72,
+            Job('E'): 114
+        }
+        predictor = QueueDepartureTimePredictor(Queue(
+            NullArrival(), [Server(FixedServiceTime(5))],
+            batch_size_distribution=DiscreteDegenerateDistribution(2)))
+        predicted_departure_times = predictor.predict([
+            (Job('A'), 10),
+            (Job('B'), 42),
+            (Job('C'), 55),
+            (Job('D'), 67),
+            (Job('E'), 98)
+        ], location_parameter='mode')
+        self.assertDictEqual(expected_departure_times, predicted_departure_times)
+
+    def test_predict_median(self):
+        expected_departure_times = {
+            Job('A'): 47,
+            Job('B'): 47,
+            Job('C'): 72,
+            Job('D'): 72,
+            Job('E'): 114
+        }
+        predictor = QueueDepartureTimePredictor(Queue(
+            NullArrival(), [Server(FixedServiceTime(5))],
+            batch_size_distribution=DiscreteDegenerateDistribution(2)))
+        predicted_departure_times = predictor.predict([
+            (Job('A'), 10),
+            (Job('B'), 42),
+            (Job('C'), 55),
+            (Job('D'), 67),
+            (Job('E'), 98)
+        ], location_parameter='mode')
+        self.assertDictEqual(expected_departure_times, predicted_departure_times)
+
     def test_predict_waiting_and_departure_times(self):
         expected_departure_times = {
             Job('A'): 47,
